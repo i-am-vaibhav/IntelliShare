@@ -1,0 +1,13 @@
+/* src/components/LandingPage.css */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3 {
+  color: #1976d2; /* Adjust according to your theme */
+}
+
+button {
+  text-transform: none; /* Keeps button text from being uppercase */
+}
