@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
 const authenticateToken = require('./validator.js');
+const fetchRecommendations = require('./recommendation_handler.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -71,6 +72,48 @@ app.post('/login', (req,res) => {
     });
 });
 
+// Get User By UserId
+app.get('/user/:userId', authenticateToken, async (req, res) => {
+  const userId = req.params.userId;
+  logger.info(`Getting user for user Id : ${userId}`);
+  try {
+      // Find the user in the database 
+      db.get(`SELECT * FROM users WHERE id = ?`, [userId], (err, user) => {
+        if (!user) {
+          return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        logger.info(`Getting user successfully for user Id : ${user.id}`);
+        res.status(200).json(user);
+      });
+  } catch (err) {
+      logger.error(`Error getting user: ${err.message}`);
+      res.status(500).json({ success: false, message: 'Error getting user' });
+  }
+});
+
+// User Profile Update
+app.post('/user/update', authenticateToken, async (req, res) => {
+  const { userId, preferences, learningStyle } = req.body;
+  logger.info(`Updating user profile for user Id : ${userId}`);
+  try {
+      // Find the user in the database and update their preferences and learning pattern
+      const user = await db.get(`SELECT * FROM users WHERE id = ?`, [userId]);
+      if (!user) {
+          return res.status(404).json({ success: false, message: 'User not found' });
+      }
+      // Update the user data
+      await db.run(`UPDATE users SET preferences = ?, learningStyle = ? WHERE id = ?`, 
+          [preferences, learningStyle, userId]);
+
+      logger.info(`Updated user profile successfully for user Id : ${userId}`);
+      res.json({ success: true, message: 'Profile updated successfully' });
+  } catch (err) {
+      logger.error(`Error updating profile: ${err.message}`);
+      res.status(500).json({ success: false, message: 'Error updating profile' });
+  }
+});
+
 // Upload Content
 app.post('/content/upload',authenticateToken, (req,res) => {
     const {title, description, contentURL, authorId} = req.body;
@@ -86,17 +129,22 @@ app.post('/content/upload',authenticateToken, (req,res) => {
 });
 
 // Get Recommendations
-app.get('/content/recommendations/:userId',authenticateToken, (req,res) => {
+app.get('/content/recommendations/:userId',authenticateToken,async (req,res) => {
     const userId = req.params.userId;
     logger.info(`Fetching content recommendations for user ID : ${userId}`);
-    db.all("SELECT * FROM content WHERE authorId != ?", [userId], (err,rows) => {
-      if (err) {
-        logger.error(`Error fetching content recommendations for user ID : ${userId} - ${err.message}`);
-        return res.status(400).json({message:"Error fetching recommendations"});
+
+    db.get(`SELECT * FROM users WHERE id = ?`, [userId], (err, user) => {
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
       }
-      logger.info(`Content recommendations sent to user ID : ${userId}`);
-      res.json(rows);
+
+      logger.info(`Content recommendations sent to user ID : ${user.id}`);
+      const recommendations = fetchRecommendations(user.preferences, user.learningStyle);
+
+      res.status(200).json({ recommendations });
     });
+
+    
 });
 
 // Fetch Content
@@ -116,8 +164,23 @@ app.get('/content/:userId',authenticateToken, (req,res) => {
     logger.info(`Content recommendations sent to user ID : ${userId}`);
     res.json(rows);
   });
-}); 
+});
 
+// Delete Content By contentId
+app.get('/content/delete/:contentId', authenticateToken, async (req, res) => {
+  const contentId = req.params.contentId;
+  logger.info(`Deleting content by content Id : ${contentId}`);
+  try {
+      // Delete the user in the database 
+      await db.run(`DELETE FROM content WHERE id = ?`, [contentId]);
+
+      logger.info(`Deleted content successfully for content Id : ${contentId}`);
+      res.status(200).json({ success: true, message:"Deleted content successfully"});
+  } catch (err) {
+      logger.error(`Error deleting user: ${err.message}`);
+      res.status(500).json({ success: false, message: 'Error deleting user' });
+  }
+});
 
 // Configuring the app to listen on PORT
 app.listen(PORT, ()=>{

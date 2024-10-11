@@ -16,7 +16,7 @@ const Login = ({onLogin}) => {
       const response = await loginUser({userName, password});
       setAlert({open:true, message: 'Logged in successfully'});
       onLogin(response.data.userId,response.data.token);
-      navigator("/intelli-share")
+      navigator("/intelli-share/");
     }catch(error){
       setAlert({open:true, message: error.response?.data?.message || 'Login failed'});
     }
