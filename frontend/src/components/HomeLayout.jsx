@@ -100,7 +100,7 @@ const HomeLayout = () => {
                 color: (theme) => theme.palette.primary.contrastText,
                 textAlign: 'center',
                 padding: '20px',
-                position: 'absolute',
+                position: 'fixed',
                 bottom: 0,
                 width: '100%',
                 boxShadow: '4px 0px 10px rgba(0, 0, 0, 0.6)', // Add left shadow

@@ -133,18 +133,16 @@ app.get('/content/recommendations/:userId',authenticateToken,async (req,res) => 
     const userId = req.params.userId;
     logger.info(`Fetching content recommendations for user ID : ${userId}`);
 
-    db.get(`SELECT * FROM users WHERE id = ?`, [userId], (err, user) => {
+    db.get(`SELECT * FROM users WHERE id = ?`, [userId], async (err, user) => {
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
 
       logger.info(`Content recommendations sent to user ID : ${user.id}`);
-      const recommendations = fetchRecommendations(user.preferences, user.learningStyle);
+      const recommendations = await fetchRecommendations(user.preferences, user.learningStyle, 5);
 
       res.status(200).json({ recommendations });
     });
-
-    
 });
 
 // Fetch Content
