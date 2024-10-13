@@ -14,3 +14,4 @@ export const logout = () => {
   localStorage.removeItem('userId');
   localStorage.removeItem('token');
 };
+

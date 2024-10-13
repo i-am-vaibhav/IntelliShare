@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 
 // Initialize the in-memory database
 db.serialize(() => {
-  db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT,password TEXT, preferences TEXT, learningStyle TEXT)");
+  db.run("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT,password TEXT, preferences TEXT, learningStyle TEXT)");
   db.run("CREATE TABLE content (id INTEGER PRIMARY KEY, title TEXT,description TEXT, contentURL TEXT, authorId INTEGER)");
   logger.info("Database initialized and tables created.");
 });
@@ -143,6 +143,26 @@ app.get('/content/recommendations/:userId',authenticateToken,async (req,res) => 
 
       res.status(200).json({ recommendations });
     });
+});
+
+// Get Posts By Preferences and Learning Style
+app.post('/contents', authenticateToken, (req,res) => {
+  const {preferences, learningStyle, userId} = req.body;
+  logger.info(`Get content by preferences = ${preferences} and learningStyle = ${learningStyle} for userId : ${userId}`);
+  try {
+    db.all(`SELECT content.*  FROM content WHERE (content.title LIKE '%' || ? || '%' OR  content.description LIKE '%' || ? || '%' OR content.title LIKE '%' || ? || '%' OR content.description LIKE '%' || ? || '%') and content.authorId != ?`, 
+      [preferences, preferences,learningStyle, learningStyle, userId], (err, rows) => {
+        if (err) {
+          logger.error(`Error fetching content for user ID : ${userId} - ${err.message}`);
+          return res.status(400).json({message:"Error fetching content"});
+        }
+        logger.info(`Content sent to user ID : ${userId}`);
+        res.json(rows);
+    });
+  } catch (err) {
+    logger.error(`Error getting content: ${err.message}`);
+    res.status(500).json({ success: false, message: `Error getting content : ${err.message}` });
+  }
 });
 
 // Fetch Content

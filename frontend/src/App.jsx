@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
@@ -87,7 +87,6 @@ const theme = createTheme({
     MuiCard: {
       defaultProps: {
         elevation: 3,
-        borderRadius: 8,
       },
     },
   },
@@ -115,7 +114,7 @@ const App = () => {
                         <HomePage/>
                       </ProtectedRoute> 
                   } />
-            <Route path="/intelli-share/recommendations" 
+            <Route path="/intelli-share/feed" 
                     element={ 
                       <ProtectedRoute>
                         <ContentList/>

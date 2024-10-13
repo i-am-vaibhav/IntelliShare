@@ -34,6 +34,12 @@ export const getRecommendations = async (userId, token) => {
   });
 }
 
+export const getContents = async (userData, token) => {
+  return await axios.post(`${API_URL}/contents`, userData, {
+    headers : { Authorization : `Bearer ${token}`}
+  });
+}
+
 export const getContent = async (userId, token) => {
   return await axios.get(`${API_URL}/content/${userId}`, {
     headers : { Authorization : `Bearer ${token}`}

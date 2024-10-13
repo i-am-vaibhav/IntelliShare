@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, CssBaseline, Button, IconButton, Avatar, Divider } from '@mui/material';
-import { UploadFile as UploadFileIcon, Recommend as RecommendIcon, PostAddOutlined, AccountCircle, Image, Logout } from '@mui/icons-material';
+import { UploadFile as UploadFileIcon, Recommend as RecommendIcon, PostAddOutlined, AccountCircle, Logout } from '@mui/icons-material';
 import { logout } from '../authService';
 
 const drawerWidth = 240;
@@ -66,11 +66,11 @@ const HomeLayout = () => {
                 <Divider sx={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }} />
                 <List>
                     {/* Navigation Links */}
-                    <ListItem button component={Link} to="/intelli-share/recommendations" sx={{ '&:hover': { bgcolor: (theme) => theme.palette.secondary.dark } }}>
+                    <ListItem button component={Link} to="/intelli-share/feed" sx={{ '&:hover': { bgcolor: (theme) => theme.palette.secondary.dark } }}>
                         <ListItemIcon sx={{ color: (theme) => theme.palette.primary.contrastText }}>
                             <RecommendIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Recommendations" primaryTypographyProps={{ color: (theme) => theme.palette.primary.contrastText }} />
+                        <ListItemText primary="My Feed" primaryTypographyProps={{ color: (theme) => theme.palette.primary.contrastText }} />
                     </ListItem>
                     <ListItem button component={Link} to="/intelli-share/upload" sx={{ '&:hover': { bgcolor: (theme) => theme.palette.secondary.dark } }}>
                         <ListItemIcon sx={{ color: (theme) => theme.palette.primary.contrastText }}>
