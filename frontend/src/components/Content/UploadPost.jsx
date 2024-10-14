@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { uploadContent } from "../../api";
-import { getToken } from "../../authService";
 import { Box, Button, Typography, TextField, Snackbar, CircularProgress } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { PostAddTwoTone } from "@mui/icons-material";
+import { useAuth } from "../../authContext";
 
 const UploadPost = () => {
   const [title, setTitle] = useState('');
@@ -11,14 +11,14 @@ const UploadPost = () => {
   const [contentURL, setContentURL] = useState('');
   const [alert, setAlert] = useState({ open: false, message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const token = getToken();
+  const {getToken,getUserId}= useAuth();
   const navigator = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await uploadContent({ title, description, contentURL, authorId: 1 }, token);
+      const response = await uploadContent({ title, description, contentURL, authorId: getUserId() }, getToken());
       setAlert({ open: true, message: 'Content uploaded successfully!' });
       
       // Clear the form after successful upload

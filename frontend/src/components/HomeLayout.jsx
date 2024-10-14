@@ -2,12 +2,13 @@ import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, CssBaseline, Button, IconButton, Avatar, Divider } from '@mui/material';
 import { UploadFile as UploadFileIcon, Recommend as RecommendIcon, PostAddOutlined, AccountCircle, Logout } from '@mui/icons-material';
-import { logout } from '../authService';
+import { useAuth } from '../authContext';
 
 const drawerWidth = 240;
 
 const HomeLayout = () => {
     const navigator = useNavigate();
+    const { logout } = useAuth();
     const handleLogout = () => {
         logout();
         navigator("/login");
@@ -76,7 +77,7 @@ const HomeLayout = () => {
                         <ListItemIcon sx={{ color: (theme) => theme.palette.primary.contrastText }}>
                             <UploadFileIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Post Content" primaryTypographyProps={{ color: (theme) => theme.palette.primary.contrastText }} />
+                        <ListItemText primary="Post" primaryTypographyProps={{ color: (theme) => theme.palette.primary.contrastText }} />
                     </ListItem>
                     <ListItem button component={Link} to="/intelli-share/posts" sx={{ '&:hover': { bgcolor: (theme) => theme.palette.secondary.dark } }}>
                         <ListItemIcon sx={{ color: (theme) => theme.palette.primary.contrastText }}>

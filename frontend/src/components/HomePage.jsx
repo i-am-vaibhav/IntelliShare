@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Grid, Paper, Button, Stack } from '@mui/material';
+import { Box, Typography, Grid, Paper, Button, Stack, Snackbar } from '@mui/material';
 import { Explore, PostAddOutlined } from '@mui/icons-material';
-import { getToken, getUserId } from '../authService';
+import { useAuth } from '../authContext';
 import { getContent, getRecommendations } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     const [uploads, setUploads] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
-    const token = getToken();
-    const userId = getUserId();
+    const {getToken, getUserId} = useAuth();
     const navigate = useNavigate();
+    const [alert, setAlert] = useState({ open: false, message: '' });
 
     // Fetch posts and recommendations on page load
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await getContent(userId, token);
+                const response = await getContent(getUserId(), getToken());
                 setUploads(response.data);
             } catch (error) {
-                alert(error.response?.data?.message || 'Failed to fetch posts');
+                setAlert({open :true,message : error.response?.data?.message || 'Failed to fetch posts'});
             }
         };
 
         const fetchRecommendations = async () => {
             try {
-                const response = await getRecommendations(userId, token);
+                const response = await getRecommendations(getUserId(), getToken());
                 setRecommendations(response.data.recommendations);
             } catch (error) {
-                alert('Oops! Something went wrong while fetching recommendations.');
+                setAlert({open :true,message : 'Oops! Something went wrong while fetching recommendations.'});
             }
         };
 
@@ -109,6 +109,12 @@ const HomePage = () => {
                     </Paper>
                 </Grid>
             </Grid>
+            <Snackbar
+              open = {alert.open}
+              autoHideDuration={6000}
+              onClose={() => setAlert({open:false,message:''})}
+              message={alert.message}
+            />
         </Box>
     );
 };

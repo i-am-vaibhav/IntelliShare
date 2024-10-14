@@ -1,7 +1,7 @@
 // src/components/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, TextField, Snackbar } from '@mui/material';
-import { getToken, getUserId } from '../../authService';
+import { useAuth } from '../../authContext';
 import { getUser, updateUserProfile } from '../../api';
 import { Cancel, Check, Update } from '@mui/icons-material';
 
@@ -10,14 +10,13 @@ const Profile = () => {
     const [preferences, setPreferences] = useState('');
     const [learningStyle, setLearningStyle] = useState('');
     const [alert, setAlert] = useState({open:false,message:''});
-    const userId = getUserId();
-    const token = getToken();
+    const {getUserId,getToken} = useAuth();
 
     // Fetch user profile details when component loads
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await getUser(userId, token);
+                const response = await getUser(getUserId(), getToken());
                 const user = response.data;
                 setPreferences(user.preferences || '');
                 setLearningStyle(user.learningStyle || '');
@@ -35,7 +34,7 @@ const Profile = () => {
                 userId: userId,
                 preferences,
                 learningStyle
-            }, token);
+            }, getToken());
 
             if (response.data.success) {
                 setAlert({open:true, message: 'Profile updated successfully!'});

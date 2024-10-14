@@ -94,19 +94,13 @@ const theme = createTheme({
 
 const App = () => {
 
-  const handleLogin = (id, newToken) => {
-    // Store token and userId in localStorage
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('userId', id);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage/>} />
           <Route path="/register" element={<Register/>} />
-          <Route path="/login" element={ <Login onLogin={handleLogin}/>} />
+          <Route path="/login" element={ <Login/>} />
           <Route path="/intelli-share" element={<ProtectedRoute><HomeLayout/></ProtectedRoute>}>
             <Route index path="/intelli-share/" 
                     element={ 

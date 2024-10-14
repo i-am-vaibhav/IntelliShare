@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Grid, Card, CardContent, CardActions, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { AppRegistration, Create, Login, Subscriptions } from '@mui/icons-material';
+import {  Create, Login } from '@mui/icons-material';
 
 const LandingPage = () => {
     return (

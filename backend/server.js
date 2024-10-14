@@ -179,7 +179,7 @@ app.get('/content/:userId',authenticateToken, (req,res) => {
       logger.error(`Error fetching content for user ID : ${userId} - ${err.message}`);
       return res.status(400).json({message:"Error fetching content"});
     }
-    logger.info(`Content recommendations sent to user ID : ${userId}`);
+    logger.info(`Content sent to user ID : ${userId}`);
     res.json(rows);
   });
 });

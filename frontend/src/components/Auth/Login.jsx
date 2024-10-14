@@ -3,14 +3,16 @@ import { loginUser } from "../../api";
 import { TextField, Button, Snackbar, Typography, Paper, Box, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import { LockOpen as LockOpenIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../authContext";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);  // To toggle password visibility
   const [alert, setAlert] = useState({ open: false, message: '' });
   const [isLoading, setIsLoading] = useState(false);  // To show loading state
   const navigator = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,7 +20,7 @@ const Login = ({ onLogin }) => {
     try {
       const response = await loginUser({ userName, password });
       setAlert({ open: true, message: 'Logged in successfully' });
-      onLogin(response.data.userId, response.data.token);
+      login(response.data.userId, response.data.token);
       navigator("/intelli-share/");
     } catch (error) {
       setAlert({ open: true, message: error.response?.data?.message || 'Login failed' });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getRecommendations, getUser, getContents } from "../../api";
-import { getToken, getUserId} from "../../authService";
+import { useAuth} from "../../authContext";
 import { Box, Typography, Grid, Card, CardContent, CardActions, Button, CircularProgress, Divider, Snackbar } from '@mui/material';
 import { ViewAgenda } from "@mui/icons-material";
 
@@ -9,17 +9,16 @@ const ContentList = () => {
   const [contentList, setContentList] = useState([]);
   const [loadingPost, setLoadingPost] = useState(true);
   const [loadingContent, setLoadingContent] = useState(true);
-  const token = getToken();
-  const userId = getUserId();
+  const {getToken, getUserId} = useAuth();
   const [alert, setAlert] = useState({ open: false, message: '' });
 
   useEffect(() => {
 
     const contents = async () => {
       try{
-        const response = await getUser(userId, token);
+        const response = await getUser(getUserId(), getToken());
         const user = response.data;
-        const getPosts = await getContents({userId, preferences : user.preferences, learningStyle : user.learningStyle}, token);
+        const getPosts = await getContents({userId : getUserId(), preferences : user.preferences, learningStyle : user.learningStyle}, getToken());
         setPosts(getPosts?.data);
       }catch(error) {
         console.error(error); // For debugging
@@ -31,7 +30,7 @@ const ContentList = () => {
 
     const fetchRecommendations = async () => {
       try {
-        const response = await getRecommendations(userId, token);
+        const response = await getRecommendations(getUserId(), getToken());
         setContentList(response.data.recommendations);
       } catch (error) {
         console.error(error); // For debugging

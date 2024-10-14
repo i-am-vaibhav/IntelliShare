@@ -1,19 +1,18 @@
 import React, {useEffect, useState} from "react";
 import { deleteContent, getContent } from "../../api";
-import { getToken, getUserId } from "../../authService";
 import { Box, Typography, Grid, Card, CardContent, CardActions, Button, Snackbar } from '@mui/material';
 import { AddCircleOutlineOutlined, Delete, ViewAgenda } from "@mui/icons-material";
+import { useAuth } from "../../authContext";
 
 const Posts = () => {
   
   const [posts, setPosts] = useState([]);
-  const token = getToken();
-  const userId = getUserId();
+  const {getToken,getUserId} = useAuth();
   const [alert, setAlert] = useState({open:false,message:''});
 
   const fetchPosts = async () => {      
     try{
-      const response = await getContent(userId, token);
+      const response = await getContent(getUserId(), getToken());
       setPosts(response.data);
     }catch(error){
       setAlert({open:true, message: error.response?.data?.message || 'Failed to fetch posts'});
@@ -25,7 +24,7 @@ const Posts = () => {
   }, []);
 
   const handleDelete = async (contentId) => {
-    const response = await deleteContent(contentId,token);
+    const response = await deleteContent(contentId,getToken());
     if(response.data.success){
       setAlert({open:true, message: response.data.message});
       fetchPosts();
