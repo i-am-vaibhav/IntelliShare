@@ -1,7 +1,7 @@
 // src/components/ProfilePage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Typography, TextField, Snackbar } from '@mui/material';
-import { useAuth } from '../../authContext';
+import { useAuth } from '../../authContentUtils';
 import { getUser, updateUserProfile } from '../../api';
 import { Cancel, Check, Update } from '@mui/icons-material';
 
@@ -26,12 +26,12 @@ const Profile = () => {
         };
 
         fetchProfile();
-    }, []);
+    }, [getUserId,getToken]);
 
     const handleUpdateProfile = async () => {
         try {
             const response = await updateUserProfile({
-                userId: userId,
+                userId: getUserId(),
                 preferences,
                 learningStyle
             }, getToken());

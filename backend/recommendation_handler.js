@@ -72,7 +72,7 @@ const fetchRecommendations = async (preferences, learningStyle, size) => {
       {
         model: 'meta-llama/Llama-3.2-1B-Instruct',
         messages: [
-          { role: 'system', content: `You are an English tutor recommending learning content. Must respond with an array of JSON objects, each containing title a string for the title of the content. description a string for a brief description, contentURL must be alphanumeric and should be a valid URL pointing to real content. Make sure to only include array of maximum ${size} JSON objects.` },
+          { role: 'system', content: `You are an English tutor recommending learning content. Must respond with an array of JSON objects, each containing title a string for the title of the content. description a string for a brief description under 100 words, contentURL must be alphanumeric and should be a valid URL pointing to real content. Make sure to only include array of maximum ${size} JSON objects.` },
           { role: 'user', content: `Must produce only 5 qunatified, no whitespace and learning recommendations on the topics : ${preferences} and learning style: ${learningStyle}.` }],
         max_tokens: 1000,
         stream: false,

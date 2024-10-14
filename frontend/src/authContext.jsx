@@ -1,15 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import {jwtDecode} from 'jwt-decode';
+import { useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import PropTypes from "prop-types";
+import { AuthContext } from './authContentUtils';
 
-// Create the AuthContext
-const AuthContext = createContext();
-
-// Custom hook to use the AuthContext
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
-
-// AuthProvider component
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -57,4 +50,8 @@ export const AuthProvider = ({ children }) => {
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+AuthProvider.propTypes = {
+    children: PropTypes.node,
 };

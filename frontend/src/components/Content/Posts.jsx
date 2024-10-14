@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import { useCallback, useEffect, useState } from "react";
 import { deleteContent, getContent } from "../../api";
 import { Box, Typography, Grid, Card, CardContent, CardActions, Button, Snackbar } from '@mui/material';
 import { AddCircleOutlineOutlined, Delete, ViewAgenda } from "@mui/icons-material";
-import { useAuth } from "../../authContext";
+import { useAuth } from "../../authContentUtils";
 
 const Posts = () => {
   
@@ -10,18 +10,18 @@ const Posts = () => {
   const {getToken,getUserId} = useAuth();
   const [alert, setAlert] = useState({open:false,message:''});
 
-  const fetchPosts = async () => {      
+  const fetchPosts = useCallback(async () => {    
     try{
       const response = await getContent(getUserId(), getToken());
       setPosts(response.data);
     }catch(error){
       setAlert({open:true, message: error.response?.data?.message || 'Failed to fetch posts'});
     }
-  };
+  }, [getUserId, getToken]);
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [getUserId,getToken,fetchPosts]);
 
   const handleDelete = async (contentId) => {
     const response = await deleteContent(contentId,getToken());

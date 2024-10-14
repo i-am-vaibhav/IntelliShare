@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getRecommendations, getUser, getContents } from "../../api";
-import { useAuth} from "../../authContext";
+import { useAuth } from "../../authContentUtils";
 import { Box, Typography, Grid, Card, CardContent, CardActions, Button, CircularProgress, Divider, Snackbar } from '@mui/material';
 import { ViewAgenda } from "@mui/icons-material";
 
@@ -42,7 +42,7 @@ const ContentList = () => {
 
     contents();
     fetchRecommendations();
-  }, []);
+  }, [getUserId,getToken]);
 
   return (
     <Box sx={{ padding: '20px', maxWidth: '1000px', margin: '0 auto' }}>
@@ -124,7 +124,7 @@ const ContentList = () => {
         </Grid>
         ) : (
           <Typography variant="h6" color="textSecondary" align="left">
-            It looks like there aren't any suggested posts for you right now.
+            It looks like there aren’t any suggested posts for you right now.
             Don’t worry, new content is added regularly—stay tuned and explore some of our other exciting categories!
           </Typography>
       )}
@@ -188,7 +188,7 @@ const ContentList = () => {
                     size="small"
                     variant="contained"
                     color="info"
-                    href={content.contentURL}
+                    href={content.contentURL || content.contenturl || content.contentUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     component="a"

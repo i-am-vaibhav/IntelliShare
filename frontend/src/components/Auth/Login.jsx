@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { loginUser } from "../../api";
 import { TextField, Button, Snackbar, Typography, Paper, Box, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import { LockOpen as LockOpenIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../authContext";
+import { useAuth } from "../../authContentUtils";
 
 const Login = () => {
   const [userName, setUserName] = useState('');
@@ -95,7 +95,7 @@ const Login = () => {
         </form>
 
         <Typography variant="body2" align="center" sx={{ marginTop: '20px' }}>
-          Don't have an account? <Link to="/register">Register</Link>
+          Don’t have an account? <Link to="/register">Register</Link>
         </Typography>
 
         <Typography variant="body2" align="center" sx={{ marginTop: '10px' }}>

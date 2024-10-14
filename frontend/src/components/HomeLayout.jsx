@@ -1,8 +1,7 @@
-import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, CssBaseline, Button, IconButton, Avatar, Divider } from '@mui/material';
 import { UploadFile as UploadFileIcon, Recommend as RecommendIcon, PostAddOutlined, AccountCircle, Logout } from '@mui/icons-material';
-import { useAuth } from '../authContext';
+import { useAuth } from '../authContentUtils';
 
 const drawerWidth = 240;
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TextField, Button, Snackbar, Typography, Paper, Box, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import { PersonAdd as PersonAddIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import { registerUser } from '../../api';

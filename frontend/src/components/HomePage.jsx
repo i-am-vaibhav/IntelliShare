@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Paper, Button, Stack, Snackbar } from '@mui/material';
 import { Explore, PostAddOutlined } from '@mui/icons-material';
-import { useAuth } from '../authContext';
+import { useAuth } from '../authContentUtils';
 import { getContent, getRecommendations } from '../api';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,13 +28,13 @@ const HomePage = () => {
                 const response = await getRecommendations(getUserId(), getToken());
                 setRecommendations(response.data.recommendations);
             } catch (error) {
-                setAlert({open :true,message : 'Oops! Something went wrong while fetching recommendations.'});
+                setAlert({open :true,message : error.response?.data?.message || 'Oops! Something went wrong while fetching recommendations.'});
             }
         };
 
         fetchPosts();
         fetchRecommendations();
-    }, []);
+    }, [getUserId,getToken]);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: '#f0f4f8', padding: '20px' }}>
@@ -62,7 +62,7 @@ const HomePage = () => {
                     variant="contained"
                     color="info"
                     startIcon={<Explore />}
-                    onClick={() => navigate('/intelli-share/recommendations')}
+                    onClick={() => navigate('/intelli-share/feed')}
                 >
                     Explore
                 </Button>
