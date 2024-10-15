@@ -53,44 +53,47 @@ IntelliShare is a content-sharing platform that adapts to user preferences and l
 
 Ensure you have Node.js and npm installed:
 
-`````bash
+```bash
 node -v
 npm -v
+```
 
 ### 2. **Clone the Repository**
 
 ```bash
 git clone https://github.com/your-username/intelli-share.git
 cd intelli-share/backend
-
+```
 
 ### 3. **Install Dependencies**
 
-````bash
+```bash
 npm install
+```
 
 ### 4. **Environment Variables**
 
 Create a `.env` file in the `backend` directory and configure the following variables:
 
-````bash
+```bash
 PORT=5000
 NODE_ENV=development
+```
 
 ### 5. **Run the Backend**
+
 To start the backend server:
 
-````bash
+```bash
 npm run start
+```
 
 The backend will run on http://localhost:5000
 
 ### 6. **Available Scripts**
 
-| Command        | Description                                    |
-|----------------|------------------------------------------------|
-| `npm start`    | Start the server in production mode            |
+| Command        | Description                                       |
+| -------------- | ------------------------------------------------- |
+| `npm start`    | Start the server in production mode               |
 | `npm run dev`  | Start the server in development mode with nodemon |
-| `npm run test` | Run backend tests                              |
-
-`````
+| `npm run test` | Run backend tests                                 |
