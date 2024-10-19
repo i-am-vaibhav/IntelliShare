@@ -1,6 +1,7 @@
 const axios = require('axios');
 
 const parseRecommendationsFromResponse = (response) => {
+  let jsonString = '';
   try {
       // Check if the response has the expected structure
       if (!response.data || !response.data.choices || response.data.choices.length === 0) {
@@ -16,14 +17,8 @@ const parseRecommendationsFromResponse = (response) => {
       // Trim whitespace from the content
       let trimmedContent = content.trim();
 
-      // Log the raw content to inspect it
-      console.log('Raw content from API:', trimmedContent);
-
       // Remove control characters (like newlines, tabs, etc.) using a regex
       trimmedContent = trimmedContent.replace(/[\x00-\x1F\x7F]/g, '');
-
-      // Log the cleaned content
-      console.log('Cleaned content:', trimmedContent);
 
       // Use a regex to extract the entire JSON array
       const jsonMatch = trimmedContent.match(/(\[.*\])/s); // Match the entire array
@@ -32,10 +27,7 @@ const parseRecommendationsFromResponse = (response) => {
       }
 
       // Extract the JSON string
-      let jsonString = jsonMatch[0];
-
-      // Log the extracted JSON string for debugging
-      console.log('Extracted JSON string:', jsonString);
+      jsonString = jsonMatch[0];
 
       // Ensure the JSON string does not have trailing characters
       // Remove any trailing commas or unexpected characters
@@ -59,6 +51,7 @@ const parseRecommendationsFromResponse = (response) => {
 
   } catch (error) {
       console.error('Error parsing recommendations:', error.message);
+      console.error(jsonString);
       return []; // You can return an empty array or handle the error as needed
   }
 };
@@ -73,7 +66,7 @@ const fetchRecommendations = async (preferences, learningStyle, size) => {
         model: 'meta-llama/Llama-3.2-1B-Instruct',
         messages: [
           { role: 'system', content: `You are an English tutor recommending learning content. Must respond with an array of JSON objects, each containing title a string for the title of the content. description a string for a brief description under 100 words, contentURL must be alphanumeric and should be a valid URL pointing to real content. Make sure to only include array of maximum ${size} JSON objects.` },
-          { role: 'user', content: `Must produce only 5 qunatified, no whitespace and learning recommendations on the topics : ${preferences} and learning style: ${learningStyle}.` }],
+          { role: 'user', content: `Must produce only ${size} qunatified, no whitespace and learning recommendations on the topics : ${preferences} and learning style: ${learningStyle}.` }],
         max_tokens: 1000,
         stream: false,
       },

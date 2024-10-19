@@ -97,3 +97,52 @@ The backend will run on http://localhost:5000
 | ----------- | ----------------- |
 | `npm start` | Start the server  |
 | `npm test`  | Run backend tests |
+
+## **Frontend Setup**
+
+### 1. **Requirements**
+
+Ensure you have Node.js and npm installed:
+
+```bash
+node -v
+npm -v
+```
+
+### 2. **Clone the Repository**
+
+```bash
+git clone https://github.com/your-username/intelli-share.git
+cd intelli-share/frontend
+```
+
+### 3. **Install Dependencies**
+
+```bash
+npm install
+```
+
+### 4. **Environment Variables**
+
+Create a `.env` file in the `frontend` directory and configure the following variables:
+
+```bash
+VITE_BACKEND_SERVER_URL=http://localhost:3000
+```
+
+### 5. **Run the Frontend**
+
+To start the frontend:
+
+```bash
+npm run dev
+```
+
+The backend will run on http://localhost:5000
+
+### 6. **Available Scripts**
+
+| Command         | Description       |
+| --------------- | ----------------- |
+| `npm run dev`   | Run dev server    |
+| `npm run build` | Run backend tests |

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Typography, Grid, Paper, Button, Stack, Snackbar } from '@mui/material';
+import { Box, Typography, Grid, Paper, Button, Stack, Snackbar, CircularProgress } from '@mui/material';
 import { Explore, PostAddOutlined } from '@mui/icons-material';
 import { useAuth } from '../authContentUtils';
 import { getContent, getRecommendations } from '../api';
@@ -11,6 +11,7 @@ const HomePage = () => {
     const {getToken, getUserId} = useAuth();
     const navigate = useNavigate();
     const [alert, setAlert] = useState({ open: false, message: '' });
+    const [loadingContent, setLoadingContent] = useState(true);
 
     // Fetch posts and recommendations on page load
     useEffect(() => {
@@ -19,21 +20,28 @@ const HomePage = () => {
                 const response = await getContent(getUserId(), getToken());
                 setUploads(response.data);
             } catch (error) {
-                setAlert({open :true,message : error.response?.data?.message || 'Failed to fetch posts'});
+                setAlert({open :true, message : error.response?.data?.message || 'Failed to fetch posts'});
             }
         };
 
         const fetchRecommendations = async () => {
             try {
-                const response = await getRecommendations(getUserId(), getToken());
+                const response = await getRecommendations(getUserId(), 6 , getToken());
                 setRecommendations(response.data.recommendations);
             } catch (error) {
-                setAlert({open :true,message : error.response?.data?.message || 'Oops! Something went wrong while fetching recommendations.'});
+                if (error.response.status!=404 ) {
+                    setAlert({open :true,message : error.response?.data?.message || 'Oops! Something went wrong while fetching recommendations.'})
+                }
+            } finally {
+                setLoadingContent(false);
             }
         };
 
-        fetchPosts();
-        fetchRecommendations();
+        const callAllFunctions = async () => {
+            await fetchPosts();
+            await fetchRecommendations();
+        }
+        callAllFunctions();
     }, [getUserId,getToken]);
 
     return (
@@ -95,7 +103,14 @@ const HomePage = () => {
                         <Typography variant="h6" gutterBottom sx={{ fontWeight: '600', color: '#1976d2' }}>
                             Recommended for You
                         </Typography>
-                        {recommendations.length > 0 ? (
+                        {loadingContent ? (
+                            <Box display="flex" flexDirection="column" justifyContent="left" alignItems="left" height="200px">
+                            <CircularProgress size={30} />
+                            <Typography variant="inherit" sx={{ marginTop: 2 }}>
+                                Loading your personalized recommendations...
+                            </Typography>
+                            </Box>
+                        ) : recommendations.length > 0 ? (
                             recommendations.map((rec,index) => (
                                 <Typography key={index} variant="body2" sx={{ marginBottom: '8px', color: '#555' }}>
                                     {rec.title}
@@ -103,7 +118,7 @@ const HomePage = () => {
                             ))
                         ) : (
                             <Typography variant="body1" sx={{ color: '#888' }}>
-                                We’ll recommend content based on your activity. Keep exploring!
+                                We didn’t find any recommendations for you right now, but keep exploring! We’ll suggest content based on your activity soon.
                             </Typography>
                         )}
                     </Paper>

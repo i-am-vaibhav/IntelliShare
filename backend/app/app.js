@@ -128,8 +128,9 @@ app.post('/content/upload',authenticateToken, (req,res) => {
 });
 
 // Get Recommendations
-app.get('/content/recommendations/:userId',authenticateToken,async (req,res) => {
+app.get('/content/recommendations/:userId/:size',authenticateToken,async (req,res) => {
     const userId = req.params.userId;
+    const size = req.params.size;
     logger.info(`Fetching content recommendations for user ID : ${userId}`);
 
     db.get(`SELECT * FROM users WHERE id = ?`, [userId], async (err, user) => {
@@ -138,7 +139,7 @@ app.get('/content/recommendations/:userId',authenticateToken,async (req,res) => 
       }
 
       logger.info(`Content recommendations sent to user ID : ${user.id}`);
-      const recommendations = await fetchRecommendations(user.preferences, user.learningStyle, 5);
+      const recommendations = await fetchRecommendations(user.preferences, user.learningStyle, size);
 
       res.status(200).json({ recommendations });
     });

@@ -18,7 +18,7 @@ const ContentList = () => {
       try{
         const response = await getUser(getUserId(), getToken());
         const user = response.data;
-        const getPosts = await getContents({userId : getUserId(), preferences : user.preferences, learningStyle : user.learningStyle}, getToken());
+        const getPosts = await getContents({userId : user.id, preferences : user.preferences, learningStyle : user.learningStyle}, getToken());
         setPosts(getPosts?.data);
       }catch(error) {
         console.error(error); // For debugging
@@ -30,7 +30,7 @@ const ContentList = () => {
 
     const fetchRecommendations = async () => {
       try {
-        const response = await getRecommendations(getUserId(), getToken());
+        const response = await getRecommendations(getUserId(), 9 , getToken());
         setContentList(response.data.recommendations);
       } catch (error) {
         console.error(error); // For debugging
