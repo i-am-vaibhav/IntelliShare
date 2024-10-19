@@ -76,8 +76,9 @@ npm install
 Create a `.env` file in the `backend` directory and configure the following variables:
 
 ```bash
-PORT=5000
-NODE_ENV=development
+PORT=3000
+SECRET_KEY=IntelliShare-Secret-Key
+HF_API_KEY=Your-HuggingFace-Key
 ```
 
 ### 5. **Run the Backend**
@@ -92,8 +93,7 @@ The backend will run on http://localhost:5000
 
 ### 6. **Available Scripts**
 
-| Command        | Description                                       |
-| -------------- | ------------------------------------------------- |
-| `npm start`    | Start the server in production mode               |
-| `npm run dev`  | Start the server in development mode with nodemon |
-| `npm run test` | Run backend tests                                 |
+| Command     | Description       |
+| ----------- | ----------------- |
+| `npm start` | Start the server  |
+| `npm test`  | Run backend tests |
