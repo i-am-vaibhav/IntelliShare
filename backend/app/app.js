@@ -7,8 +7,9 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
-const authenticateToken = require('../validator.js');
-const fetchRecommendations = require('../recommendation_handler.js');
+const authenticateToken = require('./validator.js');
+const fetchRecommendations = require('./recommendation_handler.js');
+const swaggerDocs = require('../swagger.js');
 
 const app = express();
 const db = new sqlite3.Database(':memory:');
@@ -40,6 +41,43 @@ db.serialize(() => {
 
 
 // User registration
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new user
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userName
+ *               - password
+ *               - preferences
+ *               - learningStyle
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 example: 'testuser'
+ *               password:
+ *                 type: string
+ *                 example: 'password123'
+ *               preferences:
+ *                 type: string
+ *                 example: 'Technology, AI'
+ *               learningStyle:
+ *                 type: string
+ *                 example: 'Visual'
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Error registering user
+ */
 app.post('/register', (req,res) => {
     const {userName, password, preferences, learningStyle} = req.body;
     logger.info(`Registering user : ${userName}`);
@@ -57,6 +95,31 @@ app.post('/register', (req,res) => {
 });
 
 // User login
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: User login
+ *     description: Authenticate a user with username and password.
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userName:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successful login
+ *       401:
+ *         description: Invalid credentials
+ */
 app.post('/login', (req,res) => {
     const {userName, password} = req.body;
     logger.info(`Attempting login for user: ${userName}`);
@@ -72,6 +135,28 @@ app.post('/login', (req,res) => {
 });
 
 // Get User By UserId
+/**
+ * @swagger
+ * /user/{userId}:
+ *   get:
+ *     summary: Get a user by userId
+ *     tags: [User]
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successful response, user data returned.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Error getting user.
+ */
 app.get('/user/:userId', authenticateToken, async (req, res) => {
   const userId = req.params.userId;
   logger.info(`Getting user for user Id : ${userId}`);
@@ -92,6 +177,35 @@ app.get('/user/:userId', authenticateToken, async (req, res) => {
 });
 
 // User Profile Update
+/**
+ * @swagger
+ * /user/update:
+ *   post:
+ *     summary: Update user profile
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *               preferences:
+ *                 type: string
+ *               learningStyle:
+ *                 type: string
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Error updating profile.
+ */
 app.post('/user/update', authenticateToken, async (req, res) => {
   const { userId, preferences, learningStyle } = req.body;
   logger.info(`Updating user profile for user Id : ${userId}`);
@@ -114,6 +228,35 @@ app.post('/user/update', authenticateToken, async (req, res) => {
 });
 
 // Upload Content
+/**
+ * @swagger
+ * /content/upload:
+ *   post:
+ *     summary: Upload content
+ *     tags: [Content]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               contentURL:
+ *                 type: string
+ *               authorId:
+ *                 type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       201:
+ *         description: Content uploaded successfully.
+ *       400:
+ *         description: Error uploading content.
+ */
 app.post('/content/upload',authenticateToken, (req,res) => {
     const {title, description, contentURL, authorId} = req.body;
     logger.info(`Uploading content: ${title} by user Id : ${authorId}`);
@@ -128,6 +271,33 @@ app.post('/content/upload',authenticateToken, (req,res) => {
 });
 
 // Get Recommendations
+/**
+ * @swagger
+ * /content/recommendations/{userId}/{size}:
+ *   get:
+ *     summary: Get content recommendations based on user preferences
+ *     tags: [Content]
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: size
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Recommendations fetched successfully.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Error fetching recommendations.
+ */
 app.get('/content/recommendations/:userId/:size',authenticateToken,async (req,res) => {
     const userId = req.params.userId;
     const size = req.params.size;
@@ -146,6 +316,35 @@ app.get('/content/recommendations/:userId/:size',authenticateToken,async (req,re
 });
 
 // Get Posts By Preferences and Learning Style
+/**
+ * @swagger
+ * /contents:
+ *   post:
+ *     summary: Get posts based on preferences and learning style
+ *     tags: [Content]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               preferences:
+ *                 type: string
+ *               learningStyle:
+ *                 type: string
+ *               userId:
+ *                 type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Posts fetched successfully.
+ *       400:
+ *         description: Error fetching content.
+ *       500:
+ *         description: Server error.
+ */
 app.post('/contents', authenticateToken, (req,res) => {
   const {preferences, learningStyle, userId} = req.body;
   logger.info(`Get content by preferences = ${preferences} and learningStyle = ${learningStyle} for userId : ${userId}`);
@@ -166,6 +365,26 @@ app.post('/contents', authenticateToken, (req,res) => {
 });
 
 // Fetch Content
+/**
+ * @swagger
+ * /content/{userId}:
+ *   get:
+ *     summary: Fetch content by user ID
+ *     tags: [Content]
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Content fetched successfully.
+ *       400:
+ *         description: Error fetching content.
+ */
 app.get('/content/:userId',authenticateToken, (req,res) => {
   const userId = req.params.userId;
   logger.info(`Fetching content for user ID : ${userId}`);
@@ -185,6 +404,26 @@ app.get('/content/:userId',authenticateToken, (req,res) => {
 });
 
 // Delete Content By contentId
+/**
+ * @swagger
+ * /content/delete/{contentId}:
+ *   get:
+ *     summary: Delete content by contentId
+ *     tags: [Content]
+ *     parameters:
+ *       - name: contentId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Content deleted successfully.
+ *       500:
+ *         description: Error deleting content.
+ */
 app.get('/content/delete/:contentId', authenticateToken, async (req, res) => {
   const contentId = req.params.contentId;
   logger.info(`Deleting content by content Id : ${contentId}`);
@@ -198,6 +437,12 @@ app.get('/content/delete/:contentId', authenticateToken, async (req, res) => {
       logger.error(`Error deleting user: ${err.message}`);
       res.status(500).json({ success: false, message: 'Error deleting user' });
   }
+});
+
+// Swagger JSON
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerDocs);
 });
 
 module.exports = {app, db};
