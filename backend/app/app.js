@@ -10,6 +10,7 @@ const winston = require('winston');
 const authenticateToken = require('./validator.js');
 const fetchRecommendations = require('./recommendation_handler.js');
 const swaggerDocs = require('../swagger.js');
+const { load } = require('./loader.js');
 
 const app = express();
 const db = new sqlite3.Database(':memory:');
@@ -37,6 +38,8 @@ db.serialize(() => {
   db.run("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, preferences TEXT, learningStyle TEXT,CONSTRAINT unique_username UNIQUE (username) )");
   db.run("CREATE TABLE content (id INTEGER PRIMARY KEY, title TEXT,description TEXT, contentURL TEXT, authorId INTEGER)");
   logger.info("Database initialized and tables created.");
+
+  load(db);
 });
 
 
