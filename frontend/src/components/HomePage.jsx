@@ -45,7 +45,7 @@ const HomePage = () => {
     }, [getUserId,getToken]);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: '#f0f4f8', padding: '20px' }}>
+        <Box sx={{ padding: '20px', maxWidth: '1000px', margin: '0 auto' }}>
             <Box sx={{ marginBottom: '20px' }}>
                 <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
                     Welcome back!

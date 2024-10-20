@@ -7,15 +7,15 @@ const load = (db) => {
     // Insert 5 users with topic-based preferences
     db.serialize(() => {
         db.run(`
-          INSERT INTO users (username, password, preferences, learningStyle)
-          VALUES (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)
+          INSERT INTO users (id,username, password, preferences, learningStyle)
+          VALUES (?, ?, ?, ?, ?), (?, ?, ?, ?, ?), (?, ?, ?, ?, ?), (?, ?, ?, ?, ?), (?, ?, ?, ?, ?)
         `, 
         [
-          'alice', hashedPassword, 'JavaScript', 'visual',
-          'bob', hashedPassword, 'Docker', 'auditory',
-          'charlie', hashedPassword, 'Cloud', 'kinesthetic',
-          'diana', hashedPassword, 'CSS', 'visual',
-          'edward', hashedPassword, 'Security', 'auditory'
+          '1','alice', hashedPassword, 'JavaScript', 'visual',
+          '2','bob', hashedPassword, 'Docker', 'auditory',
+          '3','charlie', hashedPassword, 'Cloud', 'kinesthetic',
+          '4','diana', hashedPassword, 'CSS', 'visual',
+          '5','edward', hashedPassword, 'Security', 'auditory'
         ]);
 
         // Insert posts for each user (2-3 posts per user)

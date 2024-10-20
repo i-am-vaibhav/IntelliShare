@@ -72,12 +72,13 @@ npm install
 
 ### 4. **Environment Variables**
 
-Create a `.env` file in the `backend` directory and configure the following variables:
+Create a `.env.NODE_ENV` file in the `backend` directory and configure the following variables:
 
 ```bash
 PORT=3000
 SECRET_KEY=IntelliShare-Secret-Key
 HF_API_KEY=Your-HuggingFace-Key
+NODE_ENV=dev
 ```
 
 ### 5. **Run the Backend**
@@ -91,6 +92,8 @@ npm run start
 The backend will run on http://localhost:5000
 
 ### 6. **Available Scripts**
+
+Append the NODE_ENV variable having environment ( eg. NODE_ENV=local as a prefix in below commands )
 
 | Command     | Description       |
 | ----------- | ----------------- |

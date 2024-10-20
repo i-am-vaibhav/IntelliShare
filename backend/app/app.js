@@ -1,4 +1,5 @@
-require('dotenv').config();
+const envFile = `.env.${process.env.NODE_ENV || 'local'}`;
+require('dotenv').config({ path: envFile });
 
 const express = require('express');
 const bodyParser = require('body-parser');
