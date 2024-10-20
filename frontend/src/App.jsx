@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
@@ -10,6 +10,7 @@ import HomeLayout from './components/HomeLayout';
 import Posts from './components/Content/Posts';
 import Profile from './components/User/Profile';
 import HomePage from './components/HomePage';
+import { useAuth } from './authContentUtils';
 
 const theme = createTheme({
   palette: {
@@ -73,7 +74,7 @@ const theme = createTheme({
         variant: 'contained',
         color: 'primary',
         size: 'medium',
-        disableElevation: true,
+        disableElevation: false,
       },
     },
     MuiTextField: {
@@ -93,13 +94,15 @@ const theme = createTheme({
 
 const App = () => {
 
+  const { isAuthenticated } = useAuth();
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage/>} />
           <Route path="/register" element={<Register/>} />
-          <Route path="/login" element={ <Login/>} />
+          <Route path="/login" element={ isAuthenticated() ?  <Navigate to="/intelli-share/" /> : <Login/> } />
           <Route path="/intelli-share" element={<ProtectedRoute><HomeLayout/></ProtectedRoute>}>
             <Route index path="/intelli-share/" 
                     element={ 

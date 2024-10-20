@@ -30,8 +30,7 @@ const Register = () => {
       // Automatically navigate to login after a delay
       setTimeout(() => {
         navigator('/login');
-      }, 1000); // 3 seconds delay before redirecting to login page
-      
+      }, 500); 
     } catch (error) {
       setAlert({ open: true, message: error.response?.data?.message || 'Registration failed' });
     } finally {
@@ -126,7 +125,7 @@ const Register = () => {
         </Typography>
 
         <Typography variant="body2" align="center" sx={{ marginTop: '10px' }}>
-          Back to <Link to="/">Landing Page</Link>
+          Back to <Link to="/">Home</Link>
         </Typography>
 
         <Snackbar
