@@ -51,7 +51,7 @@ const UploadPost = () => {
       <Typography variant="h4" gutterBottom textAlign="center">
         Post Content
       </Typography>
-      <form onSubmit={handleSubmit}>
+      <form id="postForm" onSubmit={handleSubmit}>
         <TextField
           label="Title"
           value={title}

@@ -60,7 +60,7 @@ const Register = () => {
           </Typography>
         </Box>
 
-        <form onSubmit={handleSubmit}>
+        <form id="registerForm" onSubmit={handleSubmit}>
           <TextField
             label="Username"
             variant="outlined"

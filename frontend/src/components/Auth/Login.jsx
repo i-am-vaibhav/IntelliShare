@@ -51,7 +51,7 @@ const Login = () => {
           </Typography>
         </Box>
 
-        <form onSubmit={handleSubmit}>
+        <form id="loginForm" onSubmit={handleSubmit}>
           <TextField
             label="Username"
             variant="outlined"
