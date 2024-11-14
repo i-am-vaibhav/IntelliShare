@@ -3,6 +3,7 @@ import { getRecommendations, getUser, getContents } from "../../api";
 import { useAuth } from "../../authContentUtils";
 import { Box, Typography, Grid, Card, CardContent, CardActions, Button, CircularProgress, Divider, Snackbar } from '@mui/material';
 import { ViewAgenda } from "@mui/icons-material";
+import PostCard from "./PostCard";
 
 const ContentList = () => {
   const [posts, setPosts] = useState([]);
@@ -60,64 +61,7 @@ const ContentList = () => {
         <Grid container spacing={4}>
           {posts.map((post, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card
-                variant="outlined"
-                sx={{
-                  height: '100%',
-                  boxShadow: 3,
-                  transition: 'transform 0.3s',
-                  borderRadius: '10px',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  position: 'relative',
-                  color: 'white',
-                  '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: 6,
-                  },
-                  '&:before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay for readability
-                    borderRadius: '10px',
-                  },
-                }}
-              >
-                <CardContent sx={{ position: 'relative', zIndex: 2 }}>
-                  <Typography variant="h5" gutterBottom>
-                    {post.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    {post.description.length > 80
-                      ? post.description.substring(0, 80) + '...'
-                      : post.description}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ position: 'relative', zIndex: 2 }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    color="info"
-                    href={post.contentURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    component="a"
-                    startIcon={<ViewAgenda />}
-                    sx={{
-                      ml: 'auto',
-                      mr: 'auto',
-                      backgroundColor: '#0288d1', // Brighter button for visibility
-                      '&:hover': { backgroundColor: '#0277bd' },
-                    }}
-                  >
-                    View
-                  </Button>
-                </CardActions>
-              </Card>
+              <PostCard  post={post} onDelete={null} onEdit={null}/>
             </Grid>
           ))}
         </Grid>
@@ -144,64 +88,7 @@ const ContentList = () => {
         <Grid container spacing={4}>
           {contentList.map((content, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card
-                variant="outlined"
-                sx={{
-                  height: '100%',
-                  boxShadow: 3,
-                  transition: 'transform 0.3s',
-                  borderRadius: '10px',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  position: 'relative',
-                  color: 'white',
-                  '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: 6,
-                  },
-                  '&:before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay for readability
-                    borderRadius: '10px',
-                  },
-                }}
-              >
-                <CardContent sx={{ position: 'relative', zIndex: 2 }}>
-                  <Typography variant="h5" gutterBottom>
-                    {content.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    {content.description.length > 80
-                      ? content.description.substring(0, 80) + '...'
-                      : content.description}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ position: 'relative', zIndex: 2 }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    color="info"
-                    href={content.contentURL || content.contenturl || content.contentUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    component="a"
-                    startIcon={<ViewAgenda />}
-                    sx={{
-                      ml: 'auto',
-                      mr: 'auto',
-                      backgroundColor: '#0288d1', // Brighter button for visibility
-                      '&:hover': { backgroundColor: '#0277bd' },
-                    }}
-                  >
-                    View
-                  </Button>
-                </CardActions>
-              </Card>
+              <PostCard  post={content} onDelete={null} onEdit={null}/>
             </Grid>
           ))}
         </Grid>

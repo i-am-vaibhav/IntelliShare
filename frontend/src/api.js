@@ -47,6 +47,12 @@ export const getContent = async (userId, token) => {
   });
 }
 
+export const updateContent = async (postData, token) => {
+  return await axios.post(`${API_URL}/content/${postData.userId}`, postData, {
+    headers : { Authorization : `Bearer ${token}`}
+  });
+};
+
 export const deleteContent = async (contentId, token) => {
   return await axios.get(`${API_URL}/content/delete/${contentId}`, {
     headers : { Authorization : `Bearer ${token}`}

@@ -407,6 +407,58 @@ app.get('/content/:userId',authenticateToken, (req,res) => {
   });
 });
 
+// Update Content
+/**
+ * @swagger
+ * /content/{userId}:
+ *   get:
+ *     summary: Update content by user ID
+ *     tags: [Content]
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               description:
+ *                 type: string
+ *               contentURL:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Content fetched successfully.
+ *       400:
+ *         description: Error fetching content.
+ */
+app.post('/content/:userId',authenticateToken, (req,res) => {
+  const userId = req.params.userId;
+  const { title, description, contentURL } = req.body;
+  logger.info(`Fetching content for user ID : ${userId}`);
+
+  if (!userId) {
+    return res.status(400).json({message:"User ID is required"});
+  }
+
+  logger.info(`Updating Content sent to user ID : ${userId}`);
+  updatePost({description, contentURL, title}, userId);
+  res.status(200).json({message:"Post Updated Successfully"});
+});
+
+const updatePost = (postData, userId) => {
+  db.run(`UPDATE content SET description = ?, contentURL = ? WHERE authorId = ? and title = ?`, [postData.description, postData.contentURL,userId, postData.title]);
+};
+
 // Delete Content By contentId
 /**
  * @swagger

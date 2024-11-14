@@ -11,7 +11,7 @@ const HomeLayout = () => {
     const navigator = useNavigate();
     const { logout } = useAuth();
     const [isDrawerOpen, setDrawerOpen] = useState(false);
-    const isMobile = useMediaQuery('(max-width:600px)'); // Adjust breakpoint as necessary
+    const isMobile = useMediaQuery('(max-width:600px)');
 
     const handleLogout = () => {
         logout();
@@ -29,7 +29,7 @@ const HomeLayout = () => {
     const handleListItemClick = (path) => {
         navigator(path);
         if (isMobile) {
-            setDrawerOpen(false); // Close drawer only on mobile
+            setDrawerOpen(false);
         }
     };
 
@@ -53,7 +53,7 @@ const HomeLayout = () => {
                         color="inherit"
                         aria-label="open drawer"
                         onClick={toggleDrawer}
-                        sx={{ display: { xs: 'block', md: 'none' } }} // Show only on mobile
+                        sx={{ display: { xs: 'block', md: 'none' } }}
                     >
                         <Menu />
                     </IconButton>
@@ -88,11 +88,11 @@ const HomeLayout = () => {
                         transition: 'background-color 0.3s',
                     },
                 }}
-                variant={isMobile ?  "temporary": "permanent" } // Temporary for mobile, permanent for desktop
+                variant={isMobile ?  "temporary": "permanent" }
                 open={isDrawerOpen}
                 onClose={toggleDrawer}
                 ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
+                    keepMounted: true,
                 }}
             >
                 <Toolbar />
@@ -123,7 +123,16 @@ const HomeLayout = () => {
             {/* Main Content */}
             <Box
                 component="main"
-                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 2, pb: 5, m: '0 auto', mt: 10}}
+                sx={{
+                    flexGrow: 1,
+                    bgcolor: 'background.default',
+                    p: 2,
+                    pb: 5,
+                    m: '0 auto',
+                    mt: 10,
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    marginLeft: { sm: `${drawerWidth}px` },
+                }}
             >
                 <Outlet />
             </Box>
